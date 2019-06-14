@@ -1,50 +1,5 @@
 #include "LinkedList.h"
 
-template<class T>
-void Linked_List<T>::Add_Node(T value){
-	if(head == NULL){
-		head = new List<T>(value);
-	}
-	else{
-		List<int>* ptr = head;
-
-		while(ptr != NULL){
-			ptr = ptr->next;
-		}
-
-		ptr->next = new List<T>(value);
-	}
-}
-
-template<class T>
-void Linked_List<T>::DisplayContents() const {
-	List<int>* ptr = head;
-
-	while(ptr->next != NULL){
-		std::cout << ptr->value << '\n';
-		//move to next node
-		ptr = ptr->next;
-	}
-}
-
-template<class T>
-Linked_List<T>::~Linked_List(){
-	//hold the pointer of the current node
-	List<int>* ptr = head;
-
-	while(ptr != NULL){
-		//hold node to be deleted
-		List<int>* deleted_node = ptr;
-
-		ptr = ptr->next;
-
-		delete deleted_node;
-	}
-}
-
-
-
-
 //Procedural Way 
 
 void Linked_List_Struct_Ex(){
