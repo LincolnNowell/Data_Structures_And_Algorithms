@@ -21,7 +21,7 @@ private:
 public:
     DynamicStack() : head(NULL){};
     ~DynamicStack(){
-        
+        if(head != NULL) delete head;
     };
 
     void push(T value){
@@ -40,7 +40,7 @@ public:
             val = head->value;
             node = head;
             head = head->next;
-            delete head;
+            delete node;
         }
     }
 
