@@ -23,8 +23,8 @@
 #include <math.h>
 #include <algorithm> // min function
 
-class SearchAlgorithms{
-public:
+namespace SearchAlgorithms
+{
 	template<typename T>
 	static int LinearSearch(T arr[], int size, T value);
 	template<template<class,class> class containers, typename T, typename Allocater>
@@ -49,261 +49,348 @@ public:
 	static int ExponentialSearch(T arr[], int size, T value);
 	template<template<class,class> class containers, typename T, typename Allocater>
 	static int ExponentialSearch(containers<T,Allocater>&, T);
+	
+	template<typename T>
+	static int FibonacciSearch(T arr[], int size, T value);
+	template<template<class,class> class containers, typename T, typename Allocater>
+	static int FibonacciSearch(containers<T,Allocater>&, T);
 
-private:
 	template<typename T>
 	static int RecursiveBinarySearch(T arr[], int left, int right, T value);
 	template<template<class,class> class containers, typename T, typename Allocater>
 	static int RecursiveBinarySearch(containers<T,Allocater>& container, int left, int right, T value);
-};
 
-//Works with Plain Arrays
-template<typename T>
-int SearchAlgorithms::LinearSearch(T arr[],int size, T value){
-	for(size_t index = 0; index < size; index++){
-		if(arr[index] == value){
-			return index;
-		}
-	}
-	return -1;
-}
-
-//Works with STL Containers
-template<template<class,class> class containers, typename T, typename Allocater>
-int SearchAlgorithms::LinearSearch(containers<T,Allocater>& container, T value){
-	int index = 0;
-	for (auto& element : container){
-		if(element == value){
-			return index;
-		}
-		index++;
-	}
-	return -1;
-}
-
-//Works with Plain Arrays
-template<typename T>
-int SearchAlgorithms::BinarySearch(T arr[],int size, T value){
-	int first = 0, last = size - 1, middle = 0, position = -1;
-
-	while (first <= last)
-	{
-		middle = (first + last) / 2;
-		if(arr[middle] == value){
-			return middle;
-		}
-		else if(arr[middle] > value){
-			last = middle - 1;
-		}
-		else{
-			first = middle + 1;
-		}
-	}
-	return -1;
-}
-
-//Works with STL Containers
-template<template<class,class> class containers, typename T, typename Allocater>
-int SearchAlgorithms::BinarySearch(containers<T,Allocater>& container, T value){
-	int first = 0, last = container.size() - 1, middle = 0, position = -1;
-
-	while (first <= last)
-	{
-		middle = (first + last) / 2;
-		if(container[middle] == value){
-			return middle;
-		}
-		else if(container[middle] > value){
-			last = middle - 1;
-		}
-		else{
-			first = middle + 1;
-		}
-	}
-	return -1;
-}
-
-template<typename T>
-int SearchAlgorithms::JumpSearch(T arr[],int size, T value){
-	int step = std::sqrt(size);
-
-	int prev = 0;
-	while (arr[std::min(step,size) - 1] < value){
-		prev = step;
-		step += std::sqrt(size);
-		if(prev >= size){
-			return -1;
-		}
+	template<typename T>
+	static int min(T left, T right){
+		return (left<=right)? left : right;
 	}
 
-	while(arr[prev] < value){
-		prev++;
 
-		if(prev == std::min(step,size)){
-			return -1;
-		}
-	}
-
-	if(arr[prev] == value){
-		return prev;
-	}
-
-	return -1;
-	
-}
-
-template<template<class,class> class containers, typename T, typename Allocater>
-int SearchAlgorithms::JumpSearch(containers<T,Allocater>& container, T value){
-	int size = container.size();
-	int step = std::sqrt(size);
-
-	int prev = 0;
-	while (container[std::min(step,size) - 1] < value){
-		prev = step;
-		step += std::sqrt(size);
-		if(prev >= size){
-			return -1;
-		}
-	}
-
-	while(container[prev] < value){
-		prev++;
-
-		if(prev == std::min(step,size)){
-			return -1;
-		}
-	}
-
-	if(container[prev] == value){
-		return prev;
-	}
-
-	return -1;
-}
-
-template<typename T>
-int SearchAlgorithms::InterpolationSearch(T arr[],int size, T value){
-	int low = 0, high = (size - 1);
-
-	while (low <= high and value >= arr[low] and value <= arr[high]){
-		if(low == high){
-			if(arr[low] == value){
-				return low;
+	//Works with Plain Arrays
+	template<typename T>
+	int LinearSearch(T arr[],int size, T value){
+		for(size_t index = 0; index < size; index++){
+			if(arr[index] == value){
+				return index;
 			}
-			return -1;
 		}
-
-		int position = low + ((static_cast<double>(high - low) 
-		/ (arr[high] - arr[low])) * (value - arr[low]));
-
-		if(arr[position] == value){
-			return position;
-		}
-
-		if(arr[position] < value){
-			low = position + 1;
-		}
-
-		else{
-			high = position - 1;
-		}
+		return -1;
 	}
 
-	return -1;
-	
-}
-
-template<template<class,class> class containers, typename T, typename Allocater>
-int SearchAlgorithms::InterpolationSearch(containers<T,Allocater>& container, T value){
-	int low = 0, high = (container.size() - 1);
-
-	while (low <= high and value >= container[low] and value <= container[high]){
-		if(low == high){
-			if(container[low] == value){
-				return low;
+	//Works with STL Containers
+	template<template<class,class> class containers, typename T, typename Allocater>
+	int LinearSearch(containers<T,Allocater>& container, T value){
+		int index = 0;
+		for (auto& element : container){
+			if(element == value){
+				return index;
 			}
-			return -1;
+			index++;
 		}
-
-		int position = low + ((static_cast<double>(high - low) 
-		/ (container[high] - container[low])) * (value - container[low]));
-
-		if(container[position] == value){
-			return position;
-		}
-
-		if(container[position] < value){
-			low = position + 1;
-		}
-
-		else{
-			high = position - 1;
-		}
+		return -1;
 	}
 
-	return -1;	
-}
+	//Works with Plain Arrays
+	template<typename T>
+	int BinarySearch(T arr[],int size, T value){
+		int first = 0, last = size - 1, middle = 0, position = -1;
 
-template<typename T>
-int SearchAlgorithms::RecursiveBinarySearch(T arr[], int left, int right, T value){
-	if(right >= left){
-		int middle = left + (right - left)/2;
+		while (first <= last)
+		{
+			middle = (first + last) / 2;
+			if(arr[middle] == value){
+				return middle;
+			}
+			else if(arr[middle] > value){
+				last = middle - 1;
+			}
+			else{
+				first = middle + 1;
+			}
+		}
+		return -1;
+	}
 
-		if(arr[middle] == value){
-			return middle;
+	//Works with STL Containers
+	template<template<class,class> class containers, typename T, typename Allocater>
+	int BinarySearch(containers<T,Allocater>& container, T value){
+		int first = 0, last = container.size() - 1, middle = 0, position = -1;
+
+		while (first <= last)
+		{
+			middle = (first + last) / 2;
+			if(container[middle] == value){
+				return middle;
+			}
+			else if(container[middle] > value){
+				last = middle - 1;
+			}
+			else{
+				first = middle + 1;
+			}
+		}
+		return -1;
+	}
+
+	template<typename T>
+	int JumpSearch(T arr[],int size, T value){
+		int step = std::sqrt(size);
+
+		int prev = 0;
+		while (arr[std::min(step,size) - 1] < value){
+			prev = step;
+			step += std::sqrt(size);
+			if(prev >= size){
+				return -1;
+			}
 		}
 
-		if(arr[middle] > value){
-			return RecursiveBinarySearch(arr,left,right - 1,value);
+		while(arr[prev] < value){
+			prev++;
+
+			if(prev == std::min(step,size)){
+				return -1;
+			}
 		}
 
-		return RecursiveBinarySearch(arr,middle+1,right,value);
-	}
-	return -1;
-}
-
-template<template<class,class> class containers, typename T, typename Allocater>
-int SearchAlgorithms::RecursiveBinarySearch(containers<T,Allocater>& container, int left, int right, T value){
-	if(right >= left){
-		int middle = left + (right - left)/2;
-
-		if(container[middle] == value){
-			return middle;
+		if(arr[prev] == value){
+			return prev;
 		}
 
-		if(container[middle] > value){
-			return RecursiveBinarySearch(container,left,right - 1,value);
+		return -1;
+		
+	}
+
+	template<template<class,class> class containers, typename T, typename Allocater>
+	int JumpSearch(containers<T,Allocater>& container, T value){
+		int size = container.size();
+		int step = std::sqrt(size);
+
+		int prev = 0;
+		while (container[std::min(step,size) - 1] < value){
+			prev = step;
+			step += std::sqrt(size);
+			if(prev >= size){
+				return -1;
+			}
 		}
 
-		return RecursiveBinarySearch(container,middle+1,right,value);
-	}
-	return -1;
-}
+		while(container[prev] < value){
+			prev++;
 
-template<typename T>
-int SearchAlgorithms::ExponentialSearch(T arr[],int size, T value){
-	if(arr[0] == value){
-		return 0;
-	}
+			if(prev == std::min(step,size)){
+				return -1;
+			}
+		}
 
-	int i = 1;
-	while (i < size and arr[i] <= value){
-		i *= 2;
-	}
-	
-	return RecursiveBinarySearch(arr,i/2,std::min(i,size),value);
-}
+		if(container[prev] == value){
+			return prev;
+		}
 
-template<template<class,class> class containers, typename T, typename Allocater>
-int SearchAlgorithms::ExponentialSearch(containers<T,Allocater>& container, T value){
-	if(container[0] == value){
-		return 0;
+		return -1;
 	}
 
-	int i = 1;
-	while (i < container.size() and container[i] <= value){
-		i *= 2;
+	template<typename T>
+	int InterpolationSearch(T arr[],int size, T value){
+		int low = 0, high = (size - 1);
+
+		while (low <= high and value >= arr[low] and value <= arr[high]){
+			if(low == high){
+				if(arr[low] == value){
+					return low;
+				}
+				return -1;
+			}
+
+			int position = low + ((static_cast<double>(high - low) 
+			/ (arr[high] - arr[low])) * (value - arr[low]));
+
+			if(arr[position] == value){
+				return position;
+			}
+
+			if(arr[position] < value){
+				low = position + 1;
+			}
+
+			else{
+				high = position - 1;
+			}
+		}
+
+		return -1;
+		
 	}
-	int size = container.size();
-	return RecursiveBinarySearch(container,i/2,std::min(i,size),value);
+
+	template<template<class,class> class containers, typename T, typename Allocater>
+	int InterpolationSearch(containers<T,Allocater>& container, T value){
+		int low = 0, high = (container.size() - 1);
+
+		while (low <= high and value >= container[low] and value <= container[high]){
+			if(low == high){
+				if(container[low] == value){
+					return low;
+				}
+				return -1;
+			}
+
+			int position = low + ((static_cast<double>(high - low) 
+			/ (container[high] - container[low])) * (value - container[low]));
+
+			if(container[position] == value){
+				return position;
+			}
+
+			if(container[position] < value){
+				low = position + 1;
+			}
+
+			else{
+				high = position - 1;
+			}
+		}
+
+		return -1;	
+	}
+
+	template<typename T>
+	int RecursiveBinarySearch(T arr[], int left, int right, T value){
+		if(right >= left){
+			int middle = left + (right - left)/2;
+
+			if(arr[middle] == value){
+				return middle;
+			}
+
+			if(arr[middle] > value){
+				return RecursiveBinarySearch(arr,left,right - 1,value);
+			}
+
+			return RecursiveBinarySearch(arr,middle+1,right,value);
+		}
+		return -1;
+	}
+
+	template<template<class,class> class containers, typename T, typename Allocater>
+	int RecursiveBinarySearch(containers<T,Allocater>& container, int left, int right, T value){
+		if(right >= left){
+			int middle = left + (right - left)/2;
+
+			if(container[middle] == value){
+				return middle;
+			}
+
+			if(container[middle] > value){
+				return RecursiveBinarySearch(container,left,right - 1,value);
+			}
+
+			return RecursiveBinarySearch(container,middle+1,right,value);
+		}
+		return -1;
+	}
+
+	template<typename T>
+	int ExponentialSearch(T arr[],int size, T value){
+		if(arr[0] == value){
+			return 0;
+		}
+
+		int i = 1;
+		while (i < size and arr[i] <= value){
+			i *= 2;
+		}
+		
+		return RecursiveBinarySearch(arr,i/2,std::min(i,size),value);
+	}
+
+	template<template<class,class> class containers, typename T, typename Allocater>
+	int ExponentialSearch(containers<T,Allocater>& container, T value){
+		if(container[0] == value){
+			return 0;
+		}
+
+		int i = 1;
+		while (i < container.size() and container[i] <= value){
+			i *= 2;
+		}
+		int size = container.size();
+		return RecursiveBinarySearch(container,i/2,std::min(i,size),value);
+	}
+
+	template<typename T>
+	int FibonacciSearch(T arr[],int size, T value){
+		int fibNum1 = 0;
+		int fibNum2 = 1;
+		int fibMthNumber = fibNum2 + fibNum1;
+
+		while (fibMthNumber < value){
+			fibNum2 = fibNum1;
+			fibNum1 = fibMthNumber;
+			fibMthNumber = fibNum2 + fibNum1;
+		}
+
+		int offset = -1;
+
+		while (fibMthNumber > 1){
+			int index = min(offset + fibNum2, size - 1);
+
+			if(arr[index] < value){
+				fibMthNumber = fibNum1;
+				fibNum1 = fibNum2;
+				fibNum2 = fibMthNumber - fibNum1;
+				offset = index;
+			}
+
+			else if(arr[index] > value){
+				fibMthNumber = fibNum2;
+				fibNum1 -= fibNum2;
+				fibNum2 = fibMthNumber - fibNum1;
+			}
+
+			else return index;
+			
+		}
+		
+		if(fibNum1 and arr[offset+1] == value) return offset + 1;
+		
+		return -1;
+	}
+
+	template<template<class,class> class containers, typename T, typename Allocater>
+	int FibonacciSearch(containers<T,Allocater>& container, T value){
+		int fibNum1 = 0;
+		int fibNum2 = 1;
+		int fibMthNumber = fibNum2 + fibNum1;
+
+		while (fibMthNumber < value){
+			fibNum2 = fibNum1;
+			fibNum1 = fibMthNumber;
+			fibMthNumber = fibNum2 + fibNum1;
+		}
+
+		int offset = -1;
+
+		while (fibMthNumber > 1){
+			int index = min(offset + fibNum2, static_cast<int>(container.size() - 1));
+
+			if(container[index] < value){
+				fibMthNumber = fibNum1;
+				fibNum1 = fibNum2;
+				fibNum2 = fibMthNumber - fibNum1;
+				offset = index;
+			}
+
+			else if(container[index] > value){
+				fibMthNumber = fibNum2;
+				fibNum1 -= fibNum2;
+				fibNum2 = fibMthNumber - fibNum1;
+			}
+
+			else return index;
+			
+		}
+		
+		if(fibNum1 and container[offset+1] == value) return offset + 1;
+		return -1;
+	}
 }

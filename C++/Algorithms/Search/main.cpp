@@ -27,7 +27,6 @@ int main(){
 	std::cout << SearchAlgorithms::LinearSearch(arr,5,3) << "\n";
 	std::cout << SearchAlgorithms::LinearSearch(nums,2) << "\n";
 
-
 	std::cout << SearchAlgorithms::BinarySearch(arr,5,1) << "\n";
 	std::cout << SearchAlgorithms::BinarySearch(nums,5) << "\n";
 
@@ -42,6 +41,9 @@ int main(){
 
 	std::cout << SearchAlgorithms::ExponentialSearch(arr2,16,5) << "\n";
 	std::cout << SearchAlgorithms::ExponentialSearch(nums2,1) << "\n";
+
+	std::cout << SearchAlgorithms::FibonacciSearch(arr2,16,4) << "\n";
+	std::cout << SearchAlgorithms::FibonacciSearch(nums2,8) << "\n";
 
 }
 
