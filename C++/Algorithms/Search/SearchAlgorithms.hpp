@@ -23,8 +23,9 @@
 #include <math.h>
 #include <algorithm> // min function
 
-namespace SearchAlgorithms
+class SearchAlgorithms
 {
+public:
 	template<typename T>
 	static int LinearSearch(T arr[], int size, T value);
 	template<template<class,class> class containers, typename T, typename Allocater>
@@ -60,15 +61,16 @@ namespace SearchAlgorithms
 	template<template<class,class> class containers, typename T, typename Allocater>
 	static int RecursiveBinarySearch(containers<T,Allocater>& container, int left, int right, T value);
 
+private:
 	template<typename T>
 	static int min(T left, T right){
 		return (left<=right)? left : right;
 	}
-
+};
 
 	//Works with Plain Arrays
 	template<typename T>
-	int LinearSearch(T arr[],int size, T value){
+	int SearchAlgorithms::LinearSearch(T arr[],int size, T value){
 		for(size_t index = 0; index < size; index++){
 			if(arr[index] == value){
 				return index;
@@ -79,7 +81,7 @@ namespace SearchAlgorithms
 
 	//Works with STL Containers
 	template<template<class,class> class containers, typename T, typename Allocater>
-	int LinearSearch(containers<T,Allocater>& container, T value){
+	int SearchAlgorithms::LinearSearch(containers<T,Allocater>& container, T value){
 		int index = 0;
 		for (auto& element : container){
 			if(element == value){
@@ -92,7 +94,7 @@ namespace SearchAlgorithms
 
 	//Works with Plain Arrays
 	template<typename T>
-	int BinarySearch(T arr[],int size, T value){
+	int SearchAlgorithms::BinarySearch(T arr[],int size, T value){
 		int first = 0, last = size - 1, middle = 0, position = -1;
 
 		while (first <= last)
@@ -113,7 +115,7 @@ namespace SearchAlgorithms
 
 	//Works with STL Containers
 	template<template<class,class> class containers, typename T, typename Allocater>
-	int BinarySearch(containers<T,Allocater>& container, T value){
+	int SearchAlgorithms::BinarySearch(containers<T,Allocater>& container, T value){
 		int first = 0, last = container.size() - 1, middle = 0, position = -1;
 
 		while (first <= last)
@@ -133,7 +135,7 @@ namespace SearchAlgorithms
 	}
 
 	template<typename T>
-	int JumpSearch(T arr[],int size, T value){
+	int SearchAlgorithms::JumpSearch(T arr[],int size, T value){
 		int step = std::sqrt(size);
 
 		int prev = 0;
@@ -162,7 +164,7 @@ namespace SearchAlgorithms
 	}
 
 	template<template<class,class> class containers, typename T, typename Allocater>
-	int JumpSearch(containers<T,Allocater>& container, T value){
+	int SearchAlgorithms::JumpSearch(containers<T,Allocater>& container, T value){
 		int size = container.size();
 		int step = std::sqrt(size);
 
@@ -191,7 +193,7 @@ namespace SearchAlgorithms
 	}
 
 	template<typename T>
-	int InterpolationSearch(T arr[],int size, T value){
+	int SearchAlgorithms::InterpolationSearch(T arr[],int size, T value){
 		int low = 0, high = (size - 1);
 
 		while (low <= high and value >= arr[low] and value <= arr[high]){
@@ -223,7 +225,7 @@ namespace SearchAlgorithms
 	}
 
 	template<template<class,class> class containers, typename T, typename Allocater>
-	int InterpolationSearch(containers<T,Allocater>& container, T value){
+	int SearchAlgorithms::InterpolationSearch(containers<T,Allocater>& container, T value){
 		int low = 0, high = (container.size() - 1);
 
 		while (low <= high and value >= container[low] and value <= container[high]){
@@ -254,7 +256,7 @@ namespace SearchAlgorithms
 	}
 
 	template<typename T>
-	int RecursiveBinarySearch(T arr[], int left, int right, T value){
+	int SearchAlgorithms::RecursiveBinarySearch(T arr[], int left, int right, T value){
 		if(right >= left){
 			int middle = left + (right - left)/2;
 
@@ -272,7 +274,7 @@ namespace SearchAlgorithms
 	}
 
 	template<template<class,class> class containers, typename T, typename Allocater>
-	int RecursiveBinarySearch(containers<T,Allocater>& container, int left, int right, T value){
+	int SearchAlgorithms::RecursiveBinarySearch(containers<T,Allocater>& container, int left, int right, T value){
 		if(right >= left){
 			int middle = left + (right - left)/2;
 
@@ -290,7 +292,7 @@ namespace SearchAlgorithms
 	}
 
 	template<typename T>
-	int ExponentialSearch(T arr[],int size, T value){
+	int SearchAlgorithms::ExponentialSearch(T arr[],int size, T value){
 		if(arr[0] == value){
 			return 0;
 		}
@@ -304,7 +306,7 @@ namespace SearchAlgorithms
 	}
 
 	template<template<class,class> class containers, typename T, typename Allocater>
-	int ExponentialSearch(containers<T,Allocater>& container, T value){
+	int SearchAlgorithms::ExponentialSearch(containers<T,Allocater>& container, T value){
 		if(container[0] == value){
 			return 0;
 		}
@@ -318,7 +320,7 @@ namespace SearchAlgorithms
 	}
 
 	template<typename T>
-	int FibonacciSearch(T arr[],int size, T value){
+	int SearchAlgorithms::FibonacciSearch(T arr[],int size, T value){
 		int fibNum1 = 0;
 		int fibNum2 = 1;
 		int fibMthNumber = fibNum2 + fibNum1;
@@ -357,7 +359,7 @@ namespace SearchAlgorithms
 	}
 
 	template<template<class,class> class containers, typename T, typename Allocater>
-	int FibonacciSearch(containers<T,Allocater>& container, T value){
+	int SearchAlgorithms::FibonacciSearch(containers<T,Allocater>& container, T value){
 		int fibNum1 = 0;
 		int fibNum2 = 1;
 		int fibMthNumber = fibNum2 + fibNum1;
@@ -393,4 +395,3 @@ namespace SearchAlgorithms
 		if(fibNum1 and container[offset+1] == value) return offset + 1;
 		return -1;
 	}
-}
