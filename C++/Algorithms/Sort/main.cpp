@@ -7,19 +7,48 @@ int main(){
 	const int size = 10;
 	int arr[size] = {52,11,36,85,99,45,12,2,4,77};
 	std::vector<int> nums = {52,11,36,85,99,45,12,2,4,77};
+	char Characters[size] = {'b','e','a','y','u','A','a','/','!','z'};
+	std::vector<char> Characters_Vector= {'b','e','a','y','u','A','a','/','!','z'};
 	//SortAlgorithms::SelectionSort(arr,size);
 	//SortAlgorithms::SelectionSort(nums);
 
-	SortAlgorithms::BubbleSort(arr,size);
-	SortAlgorithms::BubbleSort(nums);
+	//SortAlgorithms::BubbleSort(arr,size);
+	//SortAlgorithms::BubbleSort(nums);
+
+	//SortAlgorithms::InsertionSort(arr,size);
+	//SortAlgorithms::InsertionSort(nums);
+	//SortAlgorithms::InsertionSort(Characters,size);
+	//SortAlgorithms::InsertionSort(Characters_Vector);
+
+	//SortAlgorithms::MergeSort(arr,0,size - 1);
+	//SortAlgorithms::MergeSort(nums,0,nums.size() - 1);
+	//SortAlgorithms::MergeSort(Characters,0,size - 1);
+	//SortAlgorithms::MergeSort(Characters_Vector,0,nums.size() - 1);
+
+	SortAlgorithms::QuickSort(arr,0, size - 1);
+	SortAlgorithms::QuickSort(nums,0,nums.size() - 1);
+	SortAlgorithms::QuickSort(Characters,0, size - 1);
+	SortAlgorithms::QuickSort(Characters_Vector,0,Characters_Vector.size() - 1);
+
 	for(const auto& ele : arr){
-		std::cout << ele << "\n";
+		std::cout << ele << " ";
 	}
 
-	std::cout << "STL Container\n";
+	std::cout << "\nSTL Container\n";
 
 	for(const auto& ele : nums){
-		std::cout << ele << "\n";
+		std::cout << ele << " ";
+	}
+	std::cout << "\n";
+
+	for(const auto& ele : Characters){
+		std::cout << ele << " ";
+	}
+
+	std::cout << "\nSTL Container\n";
+
+	for(const auto& ele : Characters_Vector){
+		std::cout << ele << " ";
 	}
 }
 
