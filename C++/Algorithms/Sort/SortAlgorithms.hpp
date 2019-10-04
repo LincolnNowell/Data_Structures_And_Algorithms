@@ -52,9 +52,21 @@ namespace SortAlgorithms{
 	void QuickSort(Container<T,Allocater>& container,int left, int right);
 
 	template<typename T>
+	void HeapSort(T arr[],int size);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void HeapSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	void heapify(T arr[],int, int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void heapify(Container<T,Allocater>&,int,int);
+
+	template<typename T>
 	int partition(T arr[],int low, int high);
 	template<template<class,class> class Container, class Allocater, typename T>
 	int partition(Container<T,Allocater>& container,int low, int high);
+
+	//functions called by the different sorting algortithms
 
 	template<typename T>
 	void swap(T* left, T* right){
@@ -92,6 +104,48 @@ namespace SortAlgorithms{
 		swap(&container[i + 1], &container[high]);
 		return(i + 1);
 	}
+
+	template<typename T>
+	void heapify(T arr[],int size, int index){
+		int largest = index;
+		int left = 2*index + 1;
+		int right = 2*index + 2;
+
+		if(left < size and arr[left] > arr[largest]){
+			largest = left;
+		}
+
+		if(right < size and arr[right] > arr[largest]){
+			largest = right;
+		}
+
+		if(largest != index){
+			swap(&arr[index],&arr[largest]);
+			heapify(arr,size,largest);
+		}
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void heapify(Container<T,Allocater>& container,int size, int index){
+		int largest = index;
+		int left = 2*index + 1;
+		int right = 2*index + 2;
+
+		if(left < size and container.at(left) > container.at(largest)){
+			largest = left;
+		}
+
+		if(right < size and container.at(right) > container.at(largest)){
+			largest = right;
+		}
+
+		if(largest != index){
+			swap(&container.at(index),&container.at(largest));
+			heapify(container,size,largest);
+		}
+	}
+
+	//Sorting Algorithms
 
 	template<class T>
 	void SelectionSort(T arr[], int size){
@@ -299,6 +353,32 @@ namespace SortAlgorithms{
 			QuickSort(container,low,pi - 1);
 			QuickSort(container,pi + 1, high);
 		}
+	}
+
+	template<typename T>
+	void HeapSort(T arr[],int size){
+		for (int i = size / 2 - 1; i >= 0; i--) 
+			heapify(arr, size, i); 
+
+		for (int i = size - 1; i >= 0; i--) 
+		{ 
+			swap(&arr[0], &arr[i]); 
+
+			heapify(arr, i, 0); 
+		} 
+	}
+	
+	template<template<class,class> class Container, class Allocater, typename T>
+	void HeapSort(Container<T,Allocater>& container){
+		int size = container.size();
+		for (int i = size / 2 - 1; i >= 0; i--){ 
+			heapify(container,container.size(), i); 
+		}
+
+		for (int i = container.size() - 1; i >= 0; i--) { 
+			swap(&container.at(0), &container.at(i)); 
+			heapify(container,i,0); 
+		} 
 	}
 
 }

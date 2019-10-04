@@ -25,10 +25,15 @@ int main(){
 	//SortAlgorithms::MergeSort(Characters,0,size - 1);
 	//SortAlgorithms::MergeSort(Characters_Vector,0,nums.size() - 1);
 
-	SortAlgorithms::QuickSort(arr,0, size - 1);
-	SortAlgorithms::QuickSort(nums,0,nums.size() - 1);
-	SortAlgorithms::QuickSort(Characters,0, size - 1);
-	SortAlgorithms::QuickSort(Characters_Vector,0,Characters_Vector.size() - 1);
+	//SortAlgorithms::QuickSort(arr,0, size - 1);
+	//SortAlgorithms::QuickSort(nums,0,nums.size() - 1);
+	//SortAlgorithms::QuickSort(Characters,0, size - 1);
+	//SortAlgorithms::QuickSort(Characters_Vector,0,Characters_Vector.size() - 1);
+
+	SortAlgorithms::HeapSort(arr,size);
+	SortAlgorithms::HeapSort(nums);
+	SortAlgorithms::HeapSort(Characters,size);
+	SortAlgorithms::HeapSort(Characters_Vector);
 
 	for(const auto& ele : arr){
 		std::cout << ele << " ";
