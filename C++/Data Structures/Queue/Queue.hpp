@@ -53,7 +53,7 @@ public:
         return NumItems > queueSize;
     }
     bool isEmpty() const{
-        return NumItems < 0;
+        return NumItems <= 0;
     }
 
     void clear(){
