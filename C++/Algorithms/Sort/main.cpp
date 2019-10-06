@@ -30,10 +30,20 @@ int main(){
 	//SortAlgorithms::QuickSort(Characters,0, size - 1);
 	//SortAlgorithms::QuickSort(Characters_Vector,0,Characters_Vector.size() - 1);
 
-	SortAlgorithms::HeapSort(arr,size);
-	SortAlgorithms::HeapSort(nums);
-	SortAlgorithms::HeapSort(Characters,size);
-	SortAlgorithms::HeapSort(Characters_Vector);
+	//SortAlgorithms::HeapSort(arr,size);
+	//SortAlgorithms::HeapSort(nums);
+	//SortAlgorithms::HeapSort(Characters,size);
+	//SortAlgorithms::HeapSort(Characters_Vector);
+
+	//SortAlgorithms::CountSort(arr,size);
+	//SortAlgorithms::CountSort(nums);
+	//SortAlgorithms::CountSort(Characters,size);
+	//SortAlgorithms::CountSort(Characters_Vector);
+
+	SortAlgorithms::RadixSort(arr,size);
+	SortAlgorithms::RadixSort(nums);
+	SortAlgorithms::RadixSort(Characters,size);
+	SortAlgorithms::RadixSort(Characters_Vector);
 
 	for(const auto& ele : arr){
 		std::cout << ele << " ";

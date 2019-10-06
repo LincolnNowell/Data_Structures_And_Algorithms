@@ -18,7 +18,9 @@
  */
 
 
-#pragma 
+#pragma
+#include<algorithm> 
+#include <iostream>
 
 namespace SortAlgorithms{
 	template<typename T>
@@ -57,6 +59,21 @@ namespace SortAlgorithms{
 	void HeapSort(Container<T,Allocater>& container);
 
 	template<typename T>
+	void CountSort(T arr[],int size);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CountSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	void RadixSort(T arr[],int size);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void RadixSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	void CountSortUsedInRadixSort(T arr[],int size, int exp);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CountSortUsedInRadixSort(Container<T,Allocater>&, int);
+
+	template<typename T>
 	void heapify(T arr[],int, int);
 	template<template<class,class> class Container, class Allocater, typename T>
 	void heapify(Container<T,Allocater>&,int,int);
@@ -66,6 +83,14 @@ namespace SortAlgorithms{
 	template<template<class,class> class Container, class Allocater, typename T>
 	int partition(Container<T,Allocater>& container,int low, int high);
 
+	template<typename T>
+	void swap(T* left, T* right);
+
+	template<typename T>
+	T getMax(T arr[], int size);
+	template<template<class,class> class Container, class Allocater, typename T>
+	T getMax(Container<T,Allocater>&);
+
 	//functions called by the different sorting algortithms
 
 	template<typename T>
@@ -73,6 +98,28 @@ namespace SortAlgorithms{
 		T temp = *left;
 		*left = *right;
 		*right = temp;
+	}
+
+	template<typename T>
+	T getMax(T arr[], int size){
+		T max = arr[0];
+		for (int i = 0; i < size; i++){
+			if(arr[i] > max){
+				max = arr[i];
+			}
+		}
+		return max;
+	}
+	
+	template<template<class,class> class Container, class Allocater, typename T>
+	T getMax(Container<T,Allocater>& container){
+		T max = container.at(0);
+		for(auto& elements : container){
+			if(elements > max){
+				max = elements;
+			}
+		}
+		return max;
 	}
 
 	template<typename T>
@@ -381,4 +428,119 @@ namespace SortAlgorithms{
 		} 
 	}
 
+	template<typename T>
+	void CountSort(T arr[],int size){
+		int max = *std::max_element(arr,arr+size); 
+    	int min = *std::min_element(arr,arr+size); 
+    	int range = max - min + 1; 
+
+		std::vector<T> count(range), output(size);
+		for (int i = 0; i < size; i++){
+			count[arr[i]-min]++;
+		}
+
+		for (int i = 1; i < count.size(); i++){
+			count[i] += count[i-1];
+		}
+
+		for (int i = size-1; i >= 0; i--){
+			output[count[arr[i]-min]-1] = arr[i];
+			count[arr[i]-min]--;
+		}
+
+		for (int i = 0; i < size; i++){
+			arr[i] = output[i];
+		}	
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CountSort(Container<T,Allocater>& container){
+		int max = *std::max_element(container.begin(), container.end()); 
+    	int min = *std::min_element(container.begin(), container.end()); 
+    	int range = max - min + 1; 
+
+		std::vector<T> count(range), output(container.size());
+		for (int i = 0; i < container.size(); i++){
+			count[container[i]-min]++;
+		}
+
+		for (int i = 1; i < count.size(); i++){
+			count[i] += count[i-1];
+		}
+
+		for (int i = container.size()-1; i >= 0; i--){
+			output[count[container[i]-min]-1] = container[i];
+			count[container[i]-min]--;
+		}
+
+		for (int i = 0; i < container.size(); i++){
+			container[i] = output[i];
+		}
+	}
+
+	template<typename T>
+	void RadixSort(T arr[],int size){
+		int max = getMax(arr,size);
+
+		for (size_t exp = 1; max/exp > 0; exp *= 10){
+			CountSortUsedInRadixSort(arr,size,exp);
+		}
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void RadixSort(Container<T,Allocater>& container){
+		int max = getMax(container);
+
+		for (int exp = 1; max/exp > 0; exp *= 10){
+			CountSortUsedInRadixSort(container,exp);
+		}
+		
+	}
+
+	template<typename T>
+	void CountSortUsedInRadixSort(T arr[],int size, int exp){
+		std::vector<T> output(size);
+		int i; std::vector<T> count(10,0);
+
+		for(i = 0; i < size; i++){
+			count[(arr[i]/exp)%10]++;
+		}
+
+		for (i = 1; i < 10; i++){
+			count[i] += count[i - 1];
+		}
+
+		for (i = size - 1; i >= 0; i--){
+			output[count[(arr[i]/exp)%10]-1] = arr[i];
+			count[(arr[i]/exp)%10]--;
+		}
+
+		for(i = 0; i < size; i++){
+			arr[i] = output[i];
+		}		
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CountSortUsedInRadixSort(Container<T,Allocater>& container, int exp){
+		int size = container.size();
+		std::vector<T> output(size);
+		int i; std::vector<T> count(10,0);
+
+		for(i = 0; i < size; i++){
+			count[(container[i]/exp)%10]++;
+		}
+
+		for (i = 1; i < 10; i++){
+			count[i] += count[i - 1];
+		}
+
+		for (i = size - 1; i >= 0; i--){
+			output[count[(container[i]/exp)%10]-1] = container[i];
+			count[(container[i]/exp)%10]--;
+		}
+
+		for(i = 0; i < size; i++){
+			container[i] = output[i];
+		}
+	}
 }
