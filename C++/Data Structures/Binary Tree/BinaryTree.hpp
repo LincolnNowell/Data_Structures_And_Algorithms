@@ -24,6 +24,7 @@ public:
     void insert(T value, Leaf<T>*);
     bool search(T value);
     void preorder(Leaf<T>*);
+    void postOrder(Leaf<T>*);
     void removeValue(T value){
         remove(Root, value);
     }
@@ -31,6 +32,9 @@ public:
     void makeDeletion(Leaf<T>*&);
     void showPreorder(){
         preorder(Root);
+    }
+    void showPostOrder(){
+        postOrder(Root);
     }
     ~Binary_Tree(){
         destroyTree(Root);
@@ -52,7 +56,7 @@ void Binary_Tree<T>::insert(T value){
     if(Root != NULL){
         insert(value,Root);
     }else{
-        Root = new Leaf(value);
+        Root = new Leaf<T>(value);
     }
 }
 
@@ -66,14 +70,14 @@ void Binary_Tree<T>::insert(T value, Leaf<T>* leaf){
         if(leaf->left != NULL){
             insert(value, leaf->left);
         }else{
-            leaf->left = new Leaf(value);
+            leaf->left = new Leaf<T>(value);
         }
     }
     else if(value >= leaf->value){
         if(leaf->right != NULL){
             insert(value, leaf->right);
         }else{
-            leaf->right = new Leaf(value);
+            leaf->right = new Leaf<T>(value);
         }
     }
 }
@@ -164,5 +168,14 @@ void Binary_Tree<T>::preorder(Leaf<T>* node){
         std::cout << node->value << "\n";
         preorder(node->left);
         preorder(node->right);
+    }
+}
+
+template<typename T>
+void Binary_Tree<T>::postOrder(Leaf<T>* node){
+    if(node){
+        postOrder(node->left);
+        postOrder(node->right);
+        std::cout << node->value << "\n";
     }
 }
