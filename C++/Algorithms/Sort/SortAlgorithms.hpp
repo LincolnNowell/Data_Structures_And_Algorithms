@@ -19,7 +19,7 @@
 
 
 #pragma
-#include<algorithm> 
+#include <algorithm> 
 #include <iostream>
 
 namespace SortAlgorithms{
@@ -69,6 +69,16 @@ namespace SortAlgorithms{
 	void RadixSort(Container<T,Allocater>& container);
 
 	template<typename T>
+	void ShellSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void ShellSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	void TimSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void TimSort(Container<T,Allocater>& container);
+
+	template<typename T>
 	void CountSortUsedInRadixSort(T arr[],int size, int exp);
 	template<template<class,class> class Container, class Allocater, typename T>
 	void CountSortUsedInRadixSort(Container<T,Allocater>&, int);
@@ -82,6 +92,11 @@ namespace SortAlgorithms{
 	int partition(T arr[],int low, int high);
 	template<template<class,class> class Container, class Allocater, typename T>
 	int partition(Container<T,Allocater>& container,int low, int high);
+
+	template<typename T>
+	void ModifiedInsertionSort(T arr[],int left, int right);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void ModifiedInsertionSort(Container<T,Allocater>& container,int left, int right);
 
 	template<typename T>
 	void swap(T* left, T* right);
@@ -542,5 +557,92 @@ namespace SortAlgorithms{
 		for(i = 0; i < size; i++){
 			container[i] = output[i];
 		}
+	}
+
+	template<typename T>
+	void ShellSort(T arr[],int size){
+		for (int gap = size/2; gap > 0; gap /= 2){
+			for(int i = gap; i < size; i++){
+				int temp = arr[i];
+				int j;
+            for (j = i; j >= gap and arr[j - gap] > temp; j -= gap) 
+                arr[j] = arr[j - gap]; 
+				arr[j] = temp;
+			}
+		}
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void ShellSort(Container<T,Allocater>& container){
+			int size = container.size();
+			for (int gap = size/2; gap > 0; gap /= 2){
+			for(int i = gap; i < size; i++){
+				int temp = container.at(i);
+				int j;
+            for (j = i; j >= gap and container.at(j - gap) > temp; j -= gap) 
+                container.at(j) = container.at(j - gap); 
+				container.at(j) = temp;
+			}
+		}
+	}
+
+	template<typename T>
+	void ModifiedInsertionSort(T arr[],int left, int right){
+		for (int i = left + 1; i <= right; i++){ 
+			int temp = arr[i]; 
+			int j = i - 1; 
+			while (arr[j] > temp and j >= left){ 
+				arr[j+1] = arr[j]; 
+				j--; 
+			} 
+			arr[j+1] = temp; 
+		}
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void ModifiedInsertionSort(Container<T,Allocater>& container,int left, int right){
+		for (int i = left + 1; i <= right; i++){
+			int temp = container[i]; 
+			int j = i - 1; 
+			while (container[j] > temp and j >= left) { 
+				container[j+1] = container[j]; 
+				j--; 
+			} 
+			container[j+1] = temp; 
+		}
+	}
+
+	template<typename T>
+	void TimSort(T arr[],int n){
+		const int RUN = 32;
+		for (int i = 0; i < n; i+=RUN){ 
+			ModifiedInsertionSort(arr, i, std::min((i+31), (n-1))); 
+		}
+		for (int size = RUN; size < n; size = 2*size){ 
+			for (int left = 0; left < n; left += 2*size){ 
+				int mid = left + size - 1; 
+				int right = std::min((left + 2*size - 1), (n-1)); 
+
+				Merge(arr, left, mid, right); 
+			} 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void TimSort(Container<T,Allocater>& container){
+		const int RUN = 32;
+		int n = container.size();
+
+		for (int i = 0; i < n; i+=RUN) {
+			ModifiedInsertionSort(container, i, std::min((i+31), (n-1))); 
+		}
+		for (int size = RUN; size < n; size = 2*size){ 
+			for (int left = 0; left < n; left += 2*size) { 
+				int mid = left + size - 1; 
+				int right = std::min((left + 2*size - 1), (n-1)); 
+
+				Merge(container, left, mid, right); 
+			} 
+		} 
 	}
 }
