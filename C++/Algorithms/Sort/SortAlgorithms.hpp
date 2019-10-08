@@ -79,6 +79,16 @@ namespace SortAlgorithms{
 	void TimSort(Container<T,Allocater>& container);
 
 	template<typename T>
+	void CombSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CombSort(Container<T,Allocater>& container);
+	
+	template<typename T>
+	void PigeonHoleSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void PigeonHoleSort(Container<T,Allocater>& container);
+
+	template<typename T>
 	void CountSortUsedInRadixSort(T arr[],int size, int exp);
 	template<template<class,class> class Container, class Allocater, typename T>
 	void CountSortUsedInRadixSort(Container<T,Allocater>&, int);
@@ -205,6 +215,14 @@ namespace SortAlgorithms{
 			swap(&container.at(index),&container.at(largest));
 			heapify(container,size,largest);
 		}
+	}
+
+	int getNextGap(int gap){
+		gap = (gap*10)/13;
+		if(gap < 1){
+			return 1;
+		}
+		return gap;
 	}
 
 	//Sorting Algorithms
@@ -644,5 +662,91 @@ namespace SortAlgorithms{
 				Merge(container, left, mid, right); 
 			} 
 		} 
+	}
+
+	template<typename T>
+	void CombSort(T arr[],int size){
+		int gap = size; 
+		bool swapped = true; 	
+		while (gap != 1 || swapped == true){ 
+			gap = getNextGap(gap); 
+			swapped = false; 
+			for (int i=0; i<size-gap; i++) { 
+				if (arr[i] > arr[i+gap]) { 
+					std::swap(arr[i], arr[i+gap]); 
+					swapped = true; 
+				} 
+			} 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CombSort(Container<T,Allocater>& container){
+		int gap = container.size();
+		int size = container.size(); 
+		bool swapped = true; 	
+		while (gap != 1 || swapped == true){ 
+			gap = getNextGap(gap); 
+			swapped = false; 
+			for (int i=0; i<size-gap; i++) { 
+				if (container[i] > container[i+gap]) { 
+					std::swap(container[i], container[i+gap]); 
+					swapped = true; 
+				} 
+			} 
+		} 
+	}
+
+	template<typename T>
+	void PigeonHoleSort(T arr[],int n){ 
+		int min = arr[0], max = arr[0]; 
+		for (int i = 1; i < n; i++) 
+		{ 
+			if (arr[i] < min) 
+				min = arr[i]; 
+			if (arr[i] > max) 
+				max = arr[i]; 
+		} 
+		int range = max - min + 1;
+	 
+		std::vector<T> holes[range]; 
+	
+		for (int i = 0; i < n; i++){ 
+			holes[arr[i]-min].push_back(arr[i]); 
+		}
+		int index = 0; 
+		for (int i = 0; i < range; i++) { 
+			typename std::vector<T>::iterator it; 
+			for (it = holes[i].begin(); it != holes[i].end(); ++it){
+				arr[index++]  = *it; 
+			} 
+		}
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void PigeonHoleSort(Container<T,Allocater>& container){
+		int min = container[0], max =container[0]; 
+		int n = container.size();
+		for (int i = 1; i < n; i++) 
+		{ 
+			if (container[i] < min) 
+				min = container[i]; 
+			if (container[i] > max) 
+				max = container[i]; 
+		} 
+		int range = max - min + 1;
+	 
+		std::vector<T> holes[range]; 
+	
+		for (int i = 0; i < n; i++){ 
+			holes[container[i]-min].push_back(container[i]); 
+		}
+		int index = 0; 
+		for (int i = 0; i < range; i++){ 
+			typename std::vector<T>::iterator it; 
+			for (it = holes[i].begin(); it != holes[i].end(); ++it){ 
+				container[index++]  = *it; 
+			} 
+		}
 	}
 }
