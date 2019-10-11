@@ -89,6 +89,66 @@ namespace SortAlgorithms{
 	void PigeonHoleSort(Container<T,Allocater>& container);
 
 	template<typename T>
+	void CycleSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CycleSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	void CocktailSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CocktailSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	void BitonicSort(T arr[],int, int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void BitonicSort(Container<T,Allocater>& container,int, int);
+
+	template<typename T>
+	void PancakeSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void PancakeSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	void GnomeSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void GnomeSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	void BinaryInsertionSort(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void BinaryInsertionSort(Container<T,Allocater>& container);
+
+	template<typename T>
+	int BinarySearchUsedInBIsort(T arr[], int item, int low, int high);
+	template<template<class,class> class Container, class Allocater, typename T>
+	int BinarySearchUsedInBIsort(Container<T,Allocater>& container, int item, int low, int high);
+
+	template<typename T>
+	void Flip(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	void Flip(Container<T,Allocater>& container, int);
+
+	template<typename T>
+	int FindMax(T arr[],int);
+	template<template<class,class> class Container, class Allocater, typename T>
+	int FindMax(Container<T,Allocater>& container, int);
+
+	template<typename T>
+	void InnerCall(T arr[],int , int , int );
+	template<template<class,class> class Container, class Allocater, typename T>
+	void InnerCall(Container<T,Allocater>& ,int , int,int );
+
+	template<typename T>
+	void compAndSwap(T arr[], int , int , int );
+	template<template<class,class> class Container, class Allocater, typename T>
+	void compAndSwap(Container<T,Allocater>&, int , int , int );
+
+	template<typename T>
+	void BitonicMerge(T arr[], int, int, int );
+	template<template<class,class> class Container, class Allocater, typename T>
+	void BitonicMerge(Container<T,Allocater>&, int, int, int);		 
+
+	template<typename T>
 	void CountSortUsedInRadixSort(T arr[],int size, int exp);
 	template<template<class,class> class Container, class Allocater, typename T>
 	void CountSortUsedInRadixSort(Container<T,Allocater>&, int);
@@ -748,5 +808,401 @@ namespace SortAlgorithms{
 				container[index++]  = *it; 
 			} 
 		}
+	}
+
+	template<typename T>
+	void CycleSort(T arr[],int size ){
+		for (int cycle_start = 0; cycle_start <= size - 2; cycle_start++) { 
+			T item = arr[cycle_start]; 
+	
+			int pos = cycle_start; 
+			for (int i = cycle_start + 1; i < size; i++) 
+				if (arr[i] < item){ 
+					pos++; 
+				}
+			if (pos == cycle_start){ 
+				continue; 
+			}
+	
+			while (item == arr[pos]) {
+				pos += 1; 
+			}
+	
+			if (pos != cycle_start) { 
+				swap(&item, &arr[pos]); 
+			} 
+	
+			while (pos != cycle_start) { 
+				pos = cycle_start; 
+				for (int i = cycle_start + 1; i < size; i++) 
+					if (arr[i] < item){ 
+						pos += 1; 
+					}
+
+				while (item == arr[pos]){ 
+					pos += 1; 
+				}
+	
+				if (item != arr[pos]) { 
+					swap(&item, &arr[pos]); 
+				} 
+			} 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CycleSort(Container<T,Allocater>& container){
+		int size = container.size();
+		for (int cycle_start = 0; cycle_start <= size - 2; cycle_start++) { 
+			T item = container[cycle_start]; 
+	
+			int pos = cycle_start; 
+			for (int i = cycle_start + 1; i < size; i++) 
+				if (container[i] < item){ 
+					pos++; 
+				}
+			if (pos == cycle_start){ 
+				continue; 
+			}
+	
+			while (item == container[pos]) {
+				pos += 1; 
+			}
+	
+			if (pos != cycle_start) { 
+				swap(&item, &container[pos]); 
+			} 
+	
+			while (pos != cycle_start) { 
+				pos = cycle_start; 
+				for (int i = cycle_start + 1; i < size; i++) 
+					if (container[i] < item){ 
+						pos += 1; 
+					}
+
+				while (item == container[pos]){ 
+					pos += 1; 
+				}
+	
+				if (item != container[pos]) { 
+					swap(&item, &container[pos]); 
+				} 
+			} 
+		} 
+	}
+
+	template<typename T>
+	void CocktailSort(T arr[],int size){
+		bool swapped = true; 
+		int start = 0; 
+		int end = size - 1; 
+
+		while (swapped) { 
+			swapped = false; 
+			for (int i = start; i < end; ++i) { 
+				if (arr[i] > arr[i + 1]) { 
+					swap(&arr[i], &arr[i + 1]); 
+					swapped = true; 
+				} 
+			} 
+
+			if (!swapped){ 
+				break; 
+			}
+
+
+			swapped = false; 
+
+			--end; 
+
+			for (int i = end - 1; i >= start; --i) { 
+				if (arr[i] > arr[i + 1]) { 
+					swap(&arr[i], &arr[i + 1]); 
+					swapped = true; 
+				} 
+			} 
+			++start; 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void CocktailSort(Container<T,Allocater>& container){
+		bool swapped = true; 
+		int start = 0; 
+		int end = container.size() - 1; 
+
+		while (swapped) { 
+			swapped = false; 
+			for (int i = start; i < end; ++i) { 
+				if (container[i] > container[i + 1]) { 
+					swap(&container[i], &container[i + 1]); 
+					swapped = true; 
+				} 
+			} 
+
+			if (!swapped){ 
+				break; 
+			}
+
+
+			swapped = false; 
+
+			--end; 
+
+			for (int i = end - 1; i >= start; --i) { 
+				if (container[i] > container[i + 1]) { 
+					swap(&container[i], &container[i + 1]); 
+					swapped = true; 
+				} 
+			} 
+			++start; 
+		} 
+	}
+
+	template<typename T>
+	void InnerCall(T arr[],int low, int size, int dir){
+		if (size>1) { 
+			int k = size/2; 
+			InnerCall(arr, low, k, 1); 
+			InnerCall(arr, low+k, k, 0); 
+			BitonicMerge(arr,low, size, dir); 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void InnerCall(Container<T,Allocater>& container,int low, int size,int dir){
+		if (size>1) { 
+			int k = size/2; 
+			InnerCall(container, low, k, 1); 
+			InnerCall(container, low+k, k, 0); 
+			BitonicMerge(container,low,size, dir); 
+		} 	
+	}
+
+	template<typename T>
+	void compAndSwap(T arr[], int i, int j, int dir){
+		if (dir==(arr[i]>arr[j])){ 
+			swap(&arr[i],&arr[j]);
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void compAndSwap(Container<T,Allocater>& container, int i, int j, int dir){
+		if (dir==(container[i]>container[j])){ 
+        	swap(&container[i],&container[j]); 
+		}
+	}
+
+	template<typename T>
+	void BitonicMerge(T arr[], int low, int size, int dir){
+		if (size>1){ 
+			int k = size/2; 
+			for (int i=low; i<low+k; i++){
+				compAndSwap(arr, i, i+k, dir);
+			} 
+			BitonicMerge(arr, low, k, dir); 
+			BitonicMerge(arr, low+k, k, dir); 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void BitonicMerge(Container<T,Allocater>& container, int low, int size, int dir){
+		if (size>1){ 
+			int k = size/2; 
+			for (int i=low; i<low+k; i++){
+				compAndSwap(container, i, i+k, dir);
+			} 
+			BitonicMerge(container, low, k, dir); 
+			BitonicMerge(container, low+k, k, dir); 
+		} 
+	}	
+
+	template<typename T>
+	void BitonicSort(T arr[],int size, int direction){
+		InnerCall(arr,0,size,direction);
+	}
+	template<template<class,class> class Container, class Allocater, typename T>
+	void BitonicSort(Container<T,Allocater>& container, int direction){
+		InnerCall(container,0,container.size(),direction);
+	}
+
+	template<typename T>
+	void PancakeSort(T arr[],int size){
+		for (int curr_size = size; curr_size > 1; --curr_size) { 
+			int mi = FindMax(arr, curr_size); 		
+	
+			if (mi != curr_size-1) { 
+				Flip(arr, mi); 
+				Flip(arr, curr_size-1); 
+			} 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void PancakeSort(Container<T,Allocater>& container){
+		for (int curr_size = container.size(); curr_size > 1; --curr_size) { 
+			int mi = FindMax(container, curr_size); 		
+	
+			if (mi != curr_size-1) { 
+				Flip(container, mi); 
+				Flip(container, curr_size-1); 
+			} 
+		} 
+	}
+
+	template<typename T>
+	void Flip(T arr[],int index){
+		int temp, start = 0; 
+		while (start < index) { 
+			temp = arr[start]; 
+			arr[start] = arr[index]; 
+			arr[index] = temp; 
+			start++; 
+			index--; 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void Flip(Container<T,Allocater>& container, int index){
+		int temp, start = 0; 
+		while (start < index) { 
+			temp = container[start]; 
+			container[start] = container[index]; 
+			container[index] = temp; 
+			start++; 
+			index--; 
+		} 
+	}
+
+	template<typename T>
+	int FindMax(T arr[],int size){
+		int mi, i; 
+		for (mi = 0, i = 0; i < size; ++i){
+			if (arr[i] > arr[mi]){ 
+				mi = i; 
+			}
+		}
+		return mi; 		
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	int FindMax(Container<T,Allocater>& container, int size){
+		int mi, i; 
+		for (mi = 0, i = 0; i < size; ++i){
+			if (container[i] > container[mi]){ 
+				mi = i; 
+			}
+		}
+		return mi; 
+	}
+
+	template<typename T>
+	void GnomeSort(T arr[],int n){
+		int index = 0; 
+	
+		while (index < n) { 
+			if (index == 0) 
+				index++; 
+			if (arr[index] >= arr[index - 1]) 
+				index++; 
+			else { 
+				swap(&arr[index], &arr[index - 1]); 
+				index--; 
+			} 
+		} 
+		return; 		
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void GnomeSort(Container<T,Allocater>& container){
+		int index = 0; 
+	
+		while (index < container.size()) { 
+			if (index == 0) 
+				index++; 
+			if (container[index] >= container[index - 1]) 
+				index++; 
+			else { 
+				swap(&container[index], &container[index - 1]); 
+				index--; 
+			} 
+		} 
+		return; 
+	}
+
+	template<typename T>
+	void BinaryInsertionSort(T arr[],int size){
+		int i, loc, j, selected; 
+	
+		for (i = 1; i < size; ++i) { 
+			j = i - 1; 
+			selected = arr[i]; 
+	
+			// find location where selected sould be inseretd 
+			loc = BinarySearchUsedInBIsort(arr, selected, 0, j); 
+	
+			// Move all elements after location to create space 
+			while (j >= loc) 
+			{ 
+				arr[j+1] = arr[j]; 
+				j--; 
+			} 
+
+			arr[j+1] = selected; 
+		} 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	void BinaryInsertionSort(Container<T,Allocater>& container){
+		int i, loc, j, selected; 
+	
+		for (i = 1; i < container.size(); ++i) { 
+			j = i - 1; 
+			selected = container[i]; 
+	
+			// find location where selected sould be inseretd 
+			loc = BinarySearchUsedInBIsort(container, selected, 0, j); 
+	
+			// Move all elements after location to create space 
+			while (j >= loc) 
+			{ 
+				container[j+1] = container[j]; 
+				j--; 
+			} 
+
+			container[j+1] = selected; 
+		} 
+	}
+
+	template<typename T>
+	int BinarySearchUsedInBIsort(T arr[], int item, int low, int high){
+		if (high <= low) 
+			return (item > arr[low])?  (low + 1): low; 
+	
+		int mid = (low + high)/2; 
+	
+		if(item == arr[mid]) 
+			return mid+1; 
+	
+		if(item > arr[mid]){ 
+			return BinarySearchUsedInBIsort(arr, item, mid+1, high);
+		} 
+		return BinarySearchUsedInBIsort(arr, item, low, mid-1); 
+	}
+
+	template<template<class,class> class Container, class Allocater, typename T>
+	int BinarySearchUsedInBIsort(Container<T,Allocater>& container, int item, int low, int high){
+		if (high <= low) 
+			return (item > container[low])?  (low + 1): low; 
+	
+		int mid = (low + high)/2; 
+	
+		if(item == container[mid]) 
+			return mid+1; 
+	
+		if(item > container[mid]){ 
+			return BinarySearchUsedInBIsort(container, item, mid+1, high);
+		} 
+		return BinarySearchUsedInBIsort(container, item, low, mid-1); 
 	}
 }
